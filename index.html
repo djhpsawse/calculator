@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Money Pot Calculator</title>
-    <link rel="manifest" href="manifest.json">
-
+<link rel="manifest" href="manifest.json">
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -123,11 +122,9 @@
         const currency = currencySelect.value;
 
         if (currency === "GBP") {
-            document.body.style.backgroundImage =
-                "url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Bank_of_England_£20_note_2020_obverse.jpg/640px-Bank_of_England_£20_note_2020_obverse.jpg')";
+            document.body.style.backgroundImage = "url('img/gbp.jpg')";
         } else {
-            document.body.style.backgroundImage =
-                "url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Euro_banknotes_2002.jpg/640px-Euro_banknotes_2002.jpg')";
+            document.body.style.backgroundImage = "url('img/eur.jpg')";
         }
     }
 
@@ -236,11 +233,13 @@
 
     loadData();
 </script>
+
 <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js")
+    navigator.serviceWorker.register("./service-worker.js")
         .then(() => console.log("Service Worker Registered"));
 }
 </script>
+
 </body>
 </html>
