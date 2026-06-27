@@ -14,59 +14,34 @@
         margin: auto;
         transition: background-image 0.4s ease;
     }
-    h2 {
-        text-align: center;
-    }
+    h2 { text-align: center; }
     .box {
         background: rgba(255,255,255,0.85);
         padding: 15px;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
         margin-bottom: 20px;
     }
-    label {
-        font-weight: bold;
-        display: block;
-        margin-top: 10px;
-    }
+    label { font-weight: bold; display: block; margin-top: 10px; }
     input, select {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
+        width: 100%; padding: 8px; margin-top: 5px;
+        border-radius: 5px; border: 1px solid #ccc;
     }
     button {
-        width: 100%;
-        padding: 10px;
-        background: #0078ff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        margin-top: 15px;
-        cursor: pointer;
+        width: 100%; padding: 10px;
+        background: #0078ff; color: white;
+        border: none; border-radius: 5px;
+        margin-top: 15px; cursor: pointer;
     }
-    button:hover {
-        background: #005fcc;
-    }
-    ul {
-        list-style: none;
-        padding-left: 0;
-    }
+    button:hover { background: #005fcc; }
+    ul { list-style: none; padding-left: 0; }
     li {
-        background: #eee;
-        padding: 8px;
-        margin-top: 5px;
-        border-radius: 5px;
+        background: #eee; padding: 8px;
+        margin-top: 5px; border-radius: 5px;
     }
-
-    /* Piggy Bank Mascot */
     #mascotBox {
-        text-align: center;
-        padding: 20px;
+        text-align: center; padding: 20px;
         background: rgba(255,255,255,0.9);
-        border-radius: 12px;
-        margin-bottom: 20px;
+        border-radius: 12px; margin-bottom: 20px;
     }
     #mascot {
         font-size: 80px;
@@ -120,12 +95,10 @@
 
     function setBackground() {
         const currency = currencySelect.value;
-
-        if (currency === "GBP") {
-            document.body.style.backgroundImage = "url('img/gbp.jpg')";
-        } else {
-            document.body.style.backgroundImage = "url('img/eur.jpg')";
-        }
+        document.body.style.backgroundImage =
+            currency === "GBP"
+            ? "url('img/gbp.jpg')"
+            : "url('img/eur.jpg')";
     }
 
     function loadData() {
@@ -150,7 +123,6 @@
 
     function updateDisplay() {
         potTotalDisplay.textContent = formatCurrency(potTotal);
-
         withdrawList.innerHTML = "";
         withdrawals.forEach(w => {
             const li = document.createElement("li");
@@ -236,7 +208,7 @@
 
 <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./service-worker.js")
+    navigator.serviceWorker.register("service-worker.js")
         .then(() => console.log("Service Worker Registered"));
 }
 </script>
