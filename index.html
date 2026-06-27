@@ -58,11 +58,29 @@
         margin-top: 5px;
         border-radius: 5px;
     }
+
+    /* Piggy Bank Mascot */
+    #mascotBox {
+        text-align: center;
+        padding: 20px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    #mascot {
+        font-size: 80px;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
 </style>
 </head>
 <body>
 
 <h2>Money Pot Calculator</h2>
+
+<div id="mascotBox">
+    <div id="mascot">🐷</div>
+    <p id="mascotMessage">Your piggy bank is ready!</p>
+</div>
 
 <div class="box">
     <label>Currency</label>
@@ -93,6 +111,8 @@
     const currencySelect = document.getElementById("currency");
     const potTotalDisplay = document.getElementById("potTotal");
     const withdrawList = document.getElementById("withdrawList");
+    const mascot = document.getElementById("mascot");
+    const mascotMessage = document.getElementById("mascotMessage");
 
     let potTotal = 0;
     let withdrawals = [];
@@ -116,6 +136,7 @@
 
         updateDisplay();
         setBackground();
+        updateMascot();
     }
 
     function saveData() {
@@ -139,12 +160,38 @@
         });
     }
 
+    function updateMascot() {
+        if (potTotal <= 0) {
+            mascot.textContent = "🐷";
+            mascot.style.color = "#ff6666";
+            mascotMessage.textContent = "Your piggy bank is empty!";
+        } else if (potTotal < 50) {
+            mascot.textContent = "🐽";
+            mascot.style.color = "#ff9900";
+            mascotMessage.textContent = "Your piggy bank has a little money!";
+        } else if (potTotal < 200) {
+            mascot.textContent = "🐷";
+            mascot.style.color = "#66cc66";
+            mascotMessage.textContent = "Your piggy bank is getting happy!";
+        } else {
+            mascot.textContent = "🐖";
+            mascot.style.color = "#33cc33";
+            mascotMessage.textContent = "Your piggy bank is full and proud!";
+        }
+    }
+
     function addToPot() {
         const amount = Number(document.getElementById("addMoney").value);
         if (amount > 0) {
             potTotal += amount;
+
+            mascot.style.transform = "scale(1.2)";
+            mascotMessage.textContent = "Yay! You fed the piggy bank!";
+            setTimeout(() => mascot.style.transform = "scale(1)", 300);
+
             saveData();
             updateDisplay();
+            updateMascot();
             document.getElementById("addMoney").value = "";
         }
     }
@@ -159,8 +206,13 @@
                 date: new Date().toLocaleString()
             });
 
+            mascot.style.transform = "scale(0.8)";
+            mascotMessage.textContent = "Oh no! Money taken out!";
+            setTimeout(() => mascot.style.transform = "scale(1)", 300);
+
             saveData();
             updateDisplay();
+            updateMascot();
             document.getElementById("withdrawAmount").value = "";
         }
     }
@@ -170,6 +222,7 @@
         withdrawals = [];
         localStorage.clear();
         updateDisplay();
+        updateMascot();
         setBackground();
     }
 
