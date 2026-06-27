@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Money Calculator</title>
+<title>Money Pot Calculator</title>
 <style>
     body {
         font-family: Arial, sans-serif;
         background: #f4f4f4;
         padding: 20px;
-        max-width: 500px;
+        max-width: 600px;
         margin: auto;
     }
     h2 {
@@ -26,7 +26,7 @@
         display: block;
         margin-top: 10px;
     }
-    input {
+    input, select {
         width: 100%;
         padding: 8px;
         margin-top: 5px;
@@ -46,68 +46,122 @@
     button:hover {
         background: #005fcc;
     }
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    li {
+        background: #eee;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 5px;
+    }
 </style>
 </head>
 <body>
 
-<h2>Money Calculator</h2>
+<h2>Money Pot Calculator</h2>
 
 <div class="box">
-    <label>Income (£)</label>
-    <input type="number" id="income" placeholder="Enter income">
+    <label>Currency</label>
+    <select id="currency">
+        <option value="GBP">GBP (£)</option>
+        <option value="EUR">EUR (€)</option>
+    </select>
 
-    <label>Expenses (£)</label>
-    <input type="number" id="expenses" placeholder="Enter expenses">
+    <label>Add Money to Pot</label>
+    <input type="number" id="addMoney" placeholder="Enter amount">
+    <button onclick="addToPot()">Add to Pot</button>
 
-    <h3>Total Savings: £<span id="total">0</span></h3>
-
-    <button onclick="resetCalculator()">Reset</button>
+    <h3>Pot Total: <span id="potTotal">0</span></h3>
 </div>
 
+<div class="box">
+    <label>Withdraw Money</label>
+    <input type="number" id="withdrawAmount" placeholder="Enter amount">
+    <button onclick="withdrawMoney()">Withdraw</button>
+
+    <h3>Withdrawal History</h3>
+    <ul id="withdrawList"></ul>
+</div>
+
+<button onclick="resetAll()">Reset Everything</button>
+
 <script>
-    const incomeInput = document.getElementById("income");
-    const expensesInput = document.getElementById("expenses");
-    const totalDisplay = document.getElementById("total");
+    const currencySelect = document.getElementById("currency");
+    const potTotalDisplay = document.getElementById("potTotal");
+    const withdrawList = document.getElementById("withdrawList");
 
-    // Load saved values
+    let potTotal = 0;
+    let withdrawals = [];
+
     function loadData() {
-        const savedIncome = localStorage.getItem("income");
-        const savedExpenses = localStorage.getItem("expenses");
+        potTotal = Number(localStorage.getItem("potTotal")) || 0;
+        withdrawals = JSON.parse(localStorage.getItem("withdrawals")) || [];
+        currencySelect.value = localStorage.getItem("currency") || "GBP";
 
-        if (savedIncome) incomeInput.value = savedIncome;
-        if (savedExpenses) expensesInput.value = savedExpenses;
-
-        calculateTotal();
+        updateDisplay();
     }
 
-    // Save values
     function saveData() {
-        localStorage.setItem("income", incomeInput.value);
-        localStorage.setItem("expenses", expensesInput.value);
-        calculateTotal();
+        localStorage.setItem("potTotal", potTotal);
+        localStorage.setItem("withdrawals", JSON.stringify(withdrawals));
+        localStorage.setItem("currency", currencySelect.value);
     }
 
-    // Calculate total
-    function calculateTotal() {
-        const income = Number(incomeInput.value) || 0;
-        const expenses = Number(expensesInput.value) || 0;
-        totalDisplay.textContent = income - expenses;
+    function formatCurrency(amount) {
+        return currencySelect.value === "GBP" ? `£${amount}` : `€${amount}`;
     }
 
-    // Reset calculator
-    function resetCalculator() {
-        incomeInput.value = "";
-        expensesInput.value = "";
-        localStorage.removeItem("income");
-        localStorage.removeItem("expenses");
-        calculateTotal();
+    function updateDisplay() {
+        potTotalDisplay.textContent = formatCurrency(potTotal);
+
+        withdrawList.innerHTML = "";
+        withdrawals.forEach((w, i) => {
+            const li = document.createElement("li");
+            li.textContent = `${formatCurrency(w.amount)} - ${w.date}`;
+            withdrawList.appendChild(li);
+        });
     }
 
-    // Auto-save when typing
-    incomeInput.addEventListener("input", saveData);
-    expensesInput.addEventListener("input", saveData);
+    function addToPot() {
+        const amount = Number(document.getElementById("addMoney").value);
+        if (amount > 0) {
+            potTotal += amount;
+            saveData();
+            updateDisplay();
+            document.getElementById("addMoney").value = "";
+        }
+    }
 
-    // Load data on startup
+    function withdrawMoney() {
+        const amount = Number(document.getElementById("withdrawAmount").value);
+        if (amount > 0 && amount <= potTotal) {
+            potTotal -= amount;
+
+            withdrawals.push({
+                amount: amount,
+                date: new Date().toLocaleString()
+            });
+
+            saveData();
+            updateDisplay();
+            document.getElementById("withdrawAmount").value = "";
+        }
+    }
+
+    function resetAll() {
+        potTotal = 0;
+        withdrawals = [];
+        localStorage.clear();
+        updateDisplay();
+    }
+
+    currencySelect.addEventListener("change", () => {
+        saveData();
+        updateDisplay();
+    });
+
     loadData();
 </script>
 
