@@ -6,16 +6,18 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: #f4f4f4;
+        background-size: cover;
+        background-position: center;
         padding: 20px;
         max-width: 600px;
         margin: auto;
+        transition: background-image 0.4s ease;
     }
     h2 {
         text-align: center;
     }
     .box {
-        background: white;
+        background: rgba(255,255,255,0.85);
         padding: 15px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -95,12 +97,25 @@
     let potTotal = 0;
     let withdrawals = [];
 
+    function setBackground() {
+        const currency = currencySelect.value;
+
+        if (currency === "GBP") {
+            document.body.style.backgroundImage =
+                "url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Bank_of_England_£20_note_2020_obverse.jpg/640px-Bank_of_England_£20_note_2020_obverse.jpg')";
+        } else {
+            document.body.style.backgroundImage =
+                "url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Euro_banknotes_2002.jpg/640px-Euro_banknotes_2002.jpg')";
+        }
+    }
+
     function loadData() {
         potTotal = Number(localStorage.getItem("potTotal")) || 0;
         withdrawals = JSON.parse(localStorage.getItem("withdrawals")) || [];
         currencySelect.value = localStorage.getItem("currency") || "GBP";
 
         updateDisplay();
+        setBackground();
     }
 
     function saveData() {
@@ -117,7 +132,7 @@
         potTotalDisplay.textContent = formatCurrency(potTotal);
 
         withdrawList.innerHTML = "";
-        withdrawals.forEach((w, i) => {
+        withdrawals.forEach(w => {
             const li = document.createElement("li");
             li.textContent = `${formatCurrency(w.amount)} - ${w.date}`;
             withdrawList.appendChild(li);
@@ -155,11 +170,13 @@
         withdrawals = [];
         localStorage.clear();
         updateDisplay();
+        setBackground();
     }
 
     currencySelect.addEventListener("change", () => {
         saveData();
         updateDisplay();
+        setBackground();
     });
 
     loadData();
