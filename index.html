@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Money Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+        max-width: 500px;
+        margin: auto;
+    }
+    h2 {
+        text-align: center;
+    }
+    .box {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        background: #0078ff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        margin-top: 15px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #005fcc;
+    }
+</style>
+</head>
+<body>
+
+<h2>Money Calculator</h2>
+
+<div class="box">
+    <label>Income (£)</label>
+    <input type="number" id="income" placeholder="Enter income">
+
+    <label>Expenses (£)</label>
+    <input type="number" id="expenses" placeholder="Enter expenses">
+
+    <h3>Total Savings: £<span id="total">0</span></h3>
+
+    <button onclick="resetCalculator()">Reset</button>
+</div>
+
+<script>
+    const incomeInput = document.getElementById("income");
+    const expensesInput = document.getElementById("expenses");
+    const totalDisplay = document.getElementById("total");
+
+    // Load saved values
+    function loadData() {
+        const savedIncome = localStorage.getItem("income");
+        const savedExpenses = localStorage.getItem("expenses");
+
+        if (savedIncome) incomeInput.value = savedIncome;
+        if (savedExpenses) expensesInput.value = savedExpenses;
+
+        calculateTotal();
+    }
+
+    // Save values
+    function saveData() {
+        localStorage.setItem("income", incomeInput.value);
+        localStorage.setItem("expenses", expensesInput.value);
+        calculateTotal();
+    }
+
+    // Calculate total
+    function calculateTotal() {
+        const income = Number(incomeInput.value) || 0;
+        const expenses = Number(expensesInput.value) || 0;
+        totalDisplay.textContent = income - expenses;
+    }
+
+    // Reset calculator
+    function resetCalculator() {
+        incomeInput.value = "";
+        expensesInput.value = "";
+        localStorage.removeItem("income");
+        localStorage.removeItem("expenses");
+        calculateTotal();
+    }
+
+    // Auto-save when typing
+    incomeInput.addEventListener("input", saveData);
+    expensesInput.addEventListener("input", saveData);
+
+    // Load data on startup
+    loadData();
+</script>
+
+</body>
+</html>
