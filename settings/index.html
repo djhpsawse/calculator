@@ -50,14 +50,6 @@
         button:hover {
             background: #005fcc;
         }
-
-        .saved-message {
-            margin-top: 15px;
-            text-align: center;
-            color: green;
-            font-weight: bold;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -83,12 +75,10 @@
     </label>
 
     <button onclick="saveSettings()">Save Settings</button>
-
-    <div class="saved-message" id="savedMessage">Settings saved!</div>
 </div>
 
 <script>
-    // Load saved settings when page opens
+    // Load saved settings
     window.onload = function() {
         const savedTheme = localStorage.getItem("theme");
         const savedSound = localStorage.getItem("sound");
@@ -119,9 +109,8 @@
 
         applyTheme(theme);
 
-        const msg = document.getElementById("savedMessage");
-        msg.style.display = "block";
-        setTimeout(() => msg.style.display = "none", 2000);
+        // Redirect to home page after saving
+        window.location.href = "../home/";
     }
 
     function applyTheme(theme) {
