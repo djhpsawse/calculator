@@ -54,14 +54,6 @@
         button:hover {
             background: #005fcc;
         }
-
-        .saved-message {
-            margin-top: 15px;
-            text-align: center;
-            color: green;
-            font-weight: bold;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -80,8 +72,6 @@
     </select>
 
     <button onclick="saveAccount()">Save Settings</button>
-
-    <div class="saved-message" id="savedMessage">Settings saved!</div>
 </div>
 
 <script>
@@ -109,9 +99,8 @@
 
         applyTheme(theme);
 
-        const msg = document.getElementById("savedMessage");
-        msg.style.display = "block";
-        setTimeout(() => msg.style.display = "none", 2000);
+        // Redirect to home page after saving
+        window.location.href = "../home/";
     }
 
     function applyTheme(theme) {
