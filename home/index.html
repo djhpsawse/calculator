@@ -239,4 +239,129 @@ if ("serviceWorker" in navigator) {
 </script>
 
 </body>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        select, input[type="checkbox"] {
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #0078ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #005fcc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Settings</h2>
+
+    <label>Theme</label>
+    <select id="theme">
+        <option value="light">Light Mode</option>
+        <option value="dark">Dark Mode</option>
+        <option value="blue">Blue Mode</option>
+    </select>
+
+    <label>
+        <input type="checkbox" id="soundToggle">
+        Enable Button Sounds
+    </label>
+
+    <label>
+        <input type="checkbox" id="bigButtonsToggle">
+        Use Big Buttons
+    </label>
+
+    <button onclick="saveSettings()">Save Settings</button>
+</div>
+
+<script>
+    // Load saved settings
+    window.onload = function() {
+        const savedTheme = localStorage.getItem("theme");
+        const savedSound = localStorage.getItem("sound");
+        const savedBigButtons = localStorage.getItem("bigButtons");
+
+        if (savedTheme) {
+            document.getElementById("theme").value = savedTheme;
+            applyTheme(savedTheme);
+        }
+
+        if (savedSound === "true") {
+            document.getElementById("soundToggle").checked = true;
+        }
+
+        if (savedBigButtons === "true") {
+            document.getElementById("bigButtonsToggle").checked = true;
+        }
+    };
+
+    function saveSettings() {
+        const theme = document.getElementById("theme").value;
+        const sound = document.getElementById("soundToggle").checked;
+        const bigButtons = document.getElementById("bigButtonsToggle").checked;
+
+        localStorage.setItem("theme", theme);
+        localStorage.setItem("sound", sound);
+        localStorage.setItem("bigButtons", bigButtons);
+
+        applyTheme(theme);
+
+        // Redirect to home page after saving
+        window.location.href = "../home/";
+    }
+
+    function applyTheme(theme) {
+        if (theme === "dark") {
+            document.body.style.background = "#222";
+            document.body.style.color = "white";
+        } else if (theme === "blue") {
+            document.body.style.background = "#d0e7ff";
+            document.body.style.color = "black";
+        } else {
+            document.body.style.background = "#f0f0f0";
+            document.body.style.color = "black";
+        }
+    }
+</script>
+
+</body>
 </html>
